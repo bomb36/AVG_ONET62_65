@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/_ONET62__1.js"></script>
+        <script src="data/_ONET62__2.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[10.491505491005807,77.99409399080585],[26.701737236692505,109.7661482123518]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleMapsGreen_0');
+        map.getPane('pane_GoogleMapsGreen_0').style.zIndex = 400;
+        var layer_GoogleMapsGreen_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleMapsGreen_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+        });
+        layer_GoogleMapsGreen_0;
+        map.addLayer(layer_GoogleMapsGreen_0);
+        function pop__ONET62__1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">ID</th>\
+                        <td>' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PV_CODE</th>\
+                        <td>' + (feature.properties['PV_CODE'] !== null ? autolinker.link(feature.properties['PV_CODE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PV_TH</th>\
+                        <td>' + (feature.properties['PV_TH'] !== null ? autolinker.link(feature.properties['PV_TH'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PV_EN</th>\
+                        <td>' + (feature.properties['PV_EN'] !== null ? autolinker.link(feature.properties['PV_EN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">RE_NESDB</th>\
+                        <td>' + (feature.properties['RE_NESDB'] !== null ? autolinker.link(feature.properties['RE_NESDB'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SBJ_CODE</th>\
+                        <td>' + (feature.properties['SBJ_CODE'] !== null ? autolinker.link(feature.properties['SBJ_CODE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SBJ_NAME</th>\
+                        <td>' + (feature.properties['SBJ_NAME'] !== null ? autolinker.link(feature.properties['SBJ_NAME'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AVG_SCORE</th>\
+                        <td>' + (feature.properties['AVG_SCORE'] !== null ? autolinker.link(feature.properties['AVG_SCORE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style__ONET62__1_0(feature) {
+            if (feature.properties['AVG_SCORE'] >= 27.671276 && feature.properties['AVG_SCORE'] <= 32.531748 ) {
+                return {
+                pane: 'pane__ONET62__1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 32.531748 && feature.properties['AVG_SCORE'] <= 33.545812 ) {
+                return {
+                pane: 'pane__ONET62__1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,227,227,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 33.545812 && feature.properties['AVG_SCORE'] <= 34.330185 ) {
+                return {
+                pane: 'pane__ONET62__1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,199,199,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 34.330185 && feature.properties['AVG_SCORE'] <= 34.710998 ) {
+                return {
+                pane: 'pane__ONET62__1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,170,170,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 34.710998 && feature.properties['AVG_SCORE'] <= 34.922123 ) {
+                return {
+                pane: 'pane__ONET62__1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,142,142,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 34.922123 && feature.properties['AVG_SCORE'] <= 35.632001 ) {
+                return {
+                pane: 'pane__ONET62__1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,113,113,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 35.632001 && feature.properties['AVG_SCORE'] <= 36.560586 ) {
+                return {
+                pane: 'pane__ONET62__1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,85,85,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 36.560586 && feature.properties['AVG_SCORE'] <= 37.177874 ) {
+                return {
+                pane: 'pane__ONET62__1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,56,56,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 37.177874 && feature.properties['AVG_SCORE'] <= 37.916859 ) {
+                return {
+                pane: 'pane__ONET62__1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,28,28,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 37.916859 && feature.properties['AVG_SCORE'] <= 40.260964 ) {
+                return {
+                pane: 'pane__ONET62__1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,0,0,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane__ONET62__1');
+        map.getPane('pane__ONET62__1').style.zIndex = 401;
+        map.getPane('pane__ONET62__1').style['mix-blend-mode'] = 'normal';
+        var layer__ONET62__1 = new L.geoJson(json__ONET62__1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json__ONET62__1',
+            layerName: 'layer__ONET62__1',
+            pane: 'pane__ONET62__1',
+            onEachFeature: pop__ONET62__1,
+            style: style__ONET62__1_0,
+        });
+        bounds_group.addLayer(layer__ONET62__1);
+        map.addLayer(layer__ONET62__1);
+        function pop__ONET62__2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">ID</th>\
+                        <td>' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PV_CODE</th>\
+                        <td>' + (feature.properties['PV_CODE'] !== null ? autolinker.link(feature.properties['PV_CODE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PV_TH</th>\
+                        <td>' + (feature.properties['PV_TH'] !== null ? autolinker.link(feature.properties['PV_TH'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PV_EN</th>\
+                        <td>' + (feature.properties['PV_EN'] !== null ? autolinker.link(feature.properties['PV_EN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">RE_NESDB</th>\
+                        <td>' + (feature.properties['RE_NESDB'] !== null ? autolinker.link(feature.properties['RE_NESDB'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SBJ_CODE</th>\
+                        <td>' + (feature.properties['SBJ_CODE'] !== null ? autolinker.link(feature.properties['SBJ_CODE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AVG_SCORE</th>\
+                        <td>' + (feature.properties['AVG_SCORE'] !== null ? autolinker.link(feature.properties['AVG_SCORE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style__ONET62__2_0(feature) {
+            if (feature.properties['AVG_SCORE'] >= 23.423318 && feature.properties['AVG_SCORE'] <= 29.316889 ) {
+                return {
+                pane: 'pane__ONET62__2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(106,155,37,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 29.316889 && feature.properties['AVG_SCORE'] <= 30.506262 ) {
+                return {
+                pane: 'pane__ONET62__2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(146,14,150,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 30.506262 && feature.properties['AVG_SCORE'] <= 31.343858 ) {
+                return {
+                pane: 'pane__ONET62__2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(210,23,16,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 31.343858 && feature.properties['AVG_SCORE'] <= 31.863029 ) {
+                return {
+                pane: 'pane__ONET62__2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(140,35,237,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 31.863029 && feature.properties['AVG_SCORE'] <= 32.242460 ) {
+                return {
+                pane: 'pane__ONET62__2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(86,141,122,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 32.242460 && feature.properties['AVG_SCORE'] <= 33.226334 ) {
+                return {
+                pane: 'pane__ONET62__2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(192,234,99,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 33.226334 && feature.properties['AVG_SCORE'] <= 34.119588 ) {
+                return {
+                pane: 'pane__ONET62__2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(47,58,158,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 34.119588 && feature.properties['AVG_SCORE'] <= 35.042176 ) {
+                return {
+                pane: 'pane__ONET62__2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(159,98,38,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 35.042176 && feature.properties['AVG_SCORE'] <= 35.564715 ) {
+                return {
+                pane: 'pane__ONET62__2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(100,74,165,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['AVG_SCORE'] >= 35.564715 && feature.properties['AVG_SCORE'] <= 38.424650 ) {
+                return {
+                pane: 'pane__ONET62__2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(116,229,54,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane__ONET62__2');
+        map.getPane('pane__ONET62__2').style.zIndex = 402;
+        map.getPane('pane__ONET62__2').style['mix-blend-mode'] = 'normal';
+        var layer__ONET62__2 = new L.geoJson(json__ONET62__2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json__ONET62__2',
+            layerName: 'layer__ONET62__2',
+            pane: 'pane__ONET62__2',
+            onEachFeature: pop__ONET62__2,
+            style: style__ONET62__2_0,
+        });
+        bounds_group.addLayer(layer__ONET62__2);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'คะแนนเฉลี่ย_ONET62_คณิตศาสตร์<br /><table><tr><td style="text-align: center;"><img src="legend/_ONET62__2_234229320.png" /></td><td>23.42 - 29.32</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__2_293230511.png" /></td><td>29.32 - 30.51</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__2_305131342.png" /></td><td>30.51 - 31.34</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__2_313431863.png" /></td><td>31.34 - 31.86</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__2_318632244.png" /></td><td>31.86 - 32.24</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__2_322433235.png" /></td><td>32.24 - 33.23</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__2_332334126.png" /></td><td>33.23 - 34.12</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__2_341235047.png" /></td><td>34.12 - 35.04</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__2_350435568.png" /></td><td>35.04 - 35.56</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__2_355638429.png" /></td><td>35.56 - 38.42</td></tr></table>': layer__ONET62__2,'คะแนนเฉลี่ย_ONET62_วิทยาศาสตร์<br /><table><tr><td style="text-align: center;"><img src="legend/_ONET62__1_276732530.png" /></td><td>27.67 - 32.53</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__1_325333551.png" /></td><td>32.53 - 33.55</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__1_335534332.png" /></td><td>33.55 - 34.33</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__1_343334713.png" /></td><td>34.33 - 34.71</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__1_347134924.png" /></td><td>34.71 - 34.92</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__1_349235635.png" /></td><td>34.92 - 35.63</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__1_356336566.png" /></td><td>35.63 - 36.56</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__1_365637187.png" /></td><td>36.56 - 37.18</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__1_371837928.png" /></td><td>37.18 - 37.92</td></tr><tr><td style="text-align: center;"><img src="legend/_ONET62__1_379240269.png" /></td><td>37.92 - 40.26</td></tr></table>': layer__ONET62__1,"Google Maps Green": layer_GoogleMapsGreen_0,}).addTo(map);
+        setBounds();
+        var i = 0;
+        layer__ONET62__1.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['PV_TH'] !== null?String('<div style="color: #000000; font-size: 10pt; font-weight: bold; font-style: italic; font-family: \'TH SarabunPSK\', sans-serif;">' + layer.feature.properties['PV_TH']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css__ONET62__1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer__ONET62__2.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['PV_TH'] !== null?String('<div style="color: #000000; font-size: 10pt; font-weight: bold; font-style: italic; font-family: \'TH SarabunPSK\', sans-serif;">' + layer.feature.properties['PV_TH']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css__ONET62__2'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"PV_TH": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+        var i = 0;
+        layer__ONET62__1.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['PV_TH'] !== null?String('<div style="color: #000000; font-size: 10pt; font-weight: bold; font-style: italic; font-family: \'TH SarabunPSK\', sans-serif;">' + layer.feature.properties['PV_TH']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css__ONET62__1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer__ONET62__2.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['PV_TH'] !== null?String('<div style="color: #000000; font-size: 10pt; font-weight: bold; font-style: italic; font-family: \'TH SarabunPSK\', sans-serif;">' + layer.feature.properties['PV_TH']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css__ONET62__2'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_PV_TH = document.createElement('div');
+            div_PV_TH.id = "div_PV_TH";
+            div_PV_TH.className= "filterselect";
+            document.getElementById("menu").appendChild(div_PV_TH);
+            sel_PV_TH = document.createElement('select');
+            sel_PV_TH.multiple = true;
+            sel_PV_TH.size = 10;
+            sel_PV_TH.id = "sel_PV_TH";
+            var PV_TH_options_str = "<option value='' unselected></option>";
+            sel_PV_TH.onchange = function(){filterFunc()};
+            PV_TH_options_str  += '<option value="กระบี่">กระบี่</option>';
+            PV_TH_options_str  += '<option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>';
+            PV_TH_options_str  += '<option value="กาญจนบุรี">กาญจนบุรี</option>';
+            PV_TH_options_str  += '<option value="กาฬสินธุ์">กาฬสินธุ์</option>';
+            PV_TH_options_str  += '<option value="กำแพงเพชร">กำแพงเพชร</option>';
+            PV_TH_options_str  += '<option value="ขอนแก่น">ขอนแก่น</option>';
+            PV_TH_options_str  += '<option value="จันทบุรี">จันทบุรี</option>';
+            PV_TH_options_str  += '<option value="ฉะเชิงเทรา">ฉะเชิงเทรา</option>';
+            PV_TH_options_str  += '<option value="ชลบุรี">ชลบุรี</option>';
+            PV_TH_options_str  += '<option value="ชัยนาท">ชัยนาท</option>';
+            PV_TH_options_str  += '<option value="ชัยภูมิ">ชัยภูมิ</option>';
+            PV_TH_options_str  += '<option value="ชุมพร">ชุมพร</option>';
+            PV_TH_options_str  += '<option value="ตรัง">ตรัง</option>';
+            PV_TH_options_str  += '<option value="ตราด">ตราด</option>';
+            PV_TH_options_str  += '<option value="ตาก">ตาก</option>';
+            PV_TH_options_str  += '<option value="นครนายก">นครนายก</option>';
+            PV_TH_options_str  += '<option value="นครปฐม">นครปฐม</option>';
+            PV_TH_options_str  += '<option value="นครพนม">นครพนม</option>';
+            PV_TH_options_str  += '<option value="นครราชสีมา">นครราชสีมา</option>';
+            PV_TH_options_str  += '<option value="นครศรีธรรมราช">นครศรีธรรมราช</option>';
+            PV_TH_options_str  += '<option value="นครสวรรค์">นครสวรรค์</option>';
+            PV_TH_options_str  += '<option value="นนทบุรี">นนทบุรี</option>';
+            PV_TH_options_str  += '<option value="นราธิวาส">นราธิวาส</option>';
+            PV_TH_options_str  += '<option value="น่าน">น่าน</option>';
+            PV_TH_options_str  += '<option value="บึงกาฬ">บึงกาฬ</option>';
+            PV_TH_options_str  += '<option value="บุรีรัมย์">บุรีรัมย์</option>';
+            PV_TH_options_str  += '<option value="ปทุมธานี">ปทุมธานี</option>';
+            PV_TH_options_str  += '<option value="ประจวบคีรีขันธ์">ประจวบคีรีขันธ์</option>';
+            PV_TH_options_str  += '<option value="ปราจีนบุรี">ปราจีนบุรี</option>';
+            PV_TH_options_str  += '<option value="ปัตตานี">ปัตตานี</option>';
+            PV_TH_options_str  += '<option value="พระนครศรีอยุธยา">พระนครศรีอยุธยา</option>';
+            PV_TH_options_str  += '<option value="พะเยา">พะเยา</option>';
+            PV_TH_options_str  += '<option value="พังงา">พังงา</option>';
+            PV_TH_options_str  += '<option value="พัทลุง">พัทลุง</option>';
+            PV_TH_options_str  += '<option value="พิจิตร">พิจิตร</option>';
+            PV_TH_options_str  += '<option value="พิษณุโลก">พิษณุโลก</option>';
+            PV_TH_options_str  += '<option value="ภูเก็ต">ภูเก็ต</option>';
+            PV_TH_options_str  += '<option value="มหาสารคาม">มหาสารคาม</option>';
+            PV_TH_options_str  += '<option value="มุกดาหาร">มุกดาหาร</option>';
+            PV_TH_options_str  += '<option value="ยะลา">ยะลา</option>';
+            PV_TH_options_str  += '<option value="ยโสธร">ยโสธร</option>';
+            PV_TH_options_str  += '<option value="ระนอง">ระนอง</option>';
+            PV_TH_options_str  += '<option value="ระยอง">ระยอง</option>';
+            PV_TH_options_str  += '<option value="ราชบุรี">ราชบุรี</option>';
+            PV_TH_options_str  += '<option value="ร้อยเอ็ด">ร้อยเอ็ด</option>';
+            PV_TH_options_str  += '<option value="ลพบุรี">ลพบุรี</option>';
+            PV_TH_options_str  += '<option value="ลำปาง">ลำปาง</option>';
+            PV_TH_options_str  += '<option value="ลำพูน">ลำพูน</option>';
+            PV_TH_options_str  += '<option value="ศรีสะเกษ">ศรีสะเกษ</option>';
+            PV_TH_options_str  += '<option value="สกลนคร">สกลนคร</option>';
+            PV_TH_options_str  += '<option value="สงขลา">สงขลา</option>';
+            PV_TH_options_str  += '<option value="สตูล">สตูล</option>';
+            PV_TH_options_str  += '<option value="สมุทรปราการ">สมุทรปราการ</option>';
+            PV_TH_options_str  += '<option value="สมุทรสงคราม">สมุทรสงคราม</option>';
+            PV_TH_options_str  += '<option value="สมุทรสาคร">สมุทรสาคร</option>';
+            PV_TH_options_str  += '<option value="สระบุรี">สระบุรี</option>';
+            PV_TH_options_str  += '<option value="สระแก้ว">สระแก้ว</option>';
+            PV_TH_options_str  += '<option value="สิงห์บุรี">สิงห์บุรี</option>';
+            PV_TH_options_str  += '<option value="สุพรรณบุรี">สุพรรณบุรี</option>';
+            PV_TH_options_str  += '<option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>';
+            PV_TH_options_str  += '<option value="สุรินทร์">สุรินทร์</option>';
+            PV_TH_options_str  += '<option value="สุโขทัย">สุโขทัย</option>';
+            PV_TH_options_str  += '<option value="หนองคาย">หนองคาย</option>';
+            PV_TH_options_str  += '<option value="หนองบัวลำภู">หนองบัวลำภู</option>';
+            PV_TH_options_str  += '<option value="อำนาจเจริญ">อำนาจเจริญ</option>';
+            PV_TH_options_str  += '<option value="อุดรธานี">อุดรธานี</option>';
+            PV_TH_options_str  += '<option value="อุตรดิตถ์">อุตรดิตถ์</option>';
+            PV_TH_options_str  += '<option value="อุทัยธานี">อุทัยธานี</option>';
+            PV_TH_options_str  += '<option value="อุบลราชธานี">อุบลราชธานี</option>';
+            PV_TH_options_str  += '<option value="อ่างทอง">อ่างทอง</option>';
+            PV_TH_options_str  += '<option value="เชียงราย">เชียงราย</option>';
+            PV_TH_options_str  += '<option value="เชียงใหม่">เชียงใหม่</option>';
+            PV_TH_options_str  += '<option value="เพชรบุรี">เพชรบุรี</option>';
+            PV_TH_options_str  += '<option value="เพชรบูรณ์">เพชรบูรณ์</option>';
+            PV_TH_options_str  += '<option value="เลย">เลย</option>';
+            PV_TH_options_str  += '<option value="แพร่">แพร่</option>';
+            PV_TH_options_str  += '<option value="แม่ฮ่องสอน">แม่ฮ่องสอน</option>';
+            sel_PV_TH.innerHTML = PV_TH_options_str;
+            div_PV_TH.appendChild(sel_PV_TH);
+            var lab_PV_TH = document.createElement('div');
+            lab_PV_TH.innerHTML = 'PV_TH';
+            lab_PV_TH.className = 'filterlabel';
+            div_PV_TH.appendChild(lab_PV_TH);
+            var reset_PV_TH = document.createElement('div');
+            reset_PV_TH.innerHTML = 'clear filter';
+            reset_PV_TH.className = 'filterlabel';
+            reset_PV_TH.onclick = function() {
+                var options = document.getElementById("sel_PV_TH").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_PV_TH.appendChild(reset_PV_TH);
+        resetLabels([layer__ONET62__1,layer__ONET62__2]);
+        map.on("zoomend", function(){
+            resetLabels([layer__ONET62__1,layer__ONET62__2]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer__ONET62__1,layer__ONET62__2]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer__ONET62__1,layer__ONET62__2]);
+        });
+        </script>
+    </body>
+</html>
